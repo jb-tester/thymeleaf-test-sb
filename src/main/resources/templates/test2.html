@@ -1,0 +1,20 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+<body>
+<h1> using thymeleaf var comments</h1>
+
+
+
+
+<!--/*@thymesVar id="dummy1" type="com.example.thymeleaftests.DummyBean" */-->
+<h1 th:text="${dummy1.str1}"></h1>
+
+
+<!--/*@thymesVar id="innerDummy" type="com.example.thymeleaftests.DummyBean$InnerDummy"*/-->
+<h1 th:text="${innerDummy?.str2}"></h1>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:replace="incl1::head-body(title='included fragment')">
+    <title></title>
+</head>
+<body>
+
+
+
+
+
+<h1> test DOM selectors </h1>
+<h2>=== nodes w/o attributes: ===</h2>
+<!-- https://youtrack.jetbrains.com/issue/IDEA-145449 -->
+<div th:include="incl2:://div">1</div>
+==1
+<div th:include="incl2::div">2</div>
+==2
+<div th:include="incl2::/html">3</div>
+==3
+<div th:include="incl2::[//div]">4</div>
+==4
+<div th:include="incl2::[div]">5</div>
+==5
+<div th:include="incl2::[/html]">6</div>
+==6
+
+<h2>=== with attributes specified: ===</h2>
+<!-- idea-145455 -->
+<div th:include="incl2::div[@id='div2_id']"></div>
+<div th:include="incl2::div[@title='div3_title']"></div>
+<div th:include="incl2::div[title='div3_title']"></div>
+
+<h2>=== logical expressions: ==</h2>
+<!-- idea-145456 -->
+
+<div th:include="incl2::div[@class='div1_class' and @title='div1_title']"></div>
+<!--<div th:include="incl2::div[(class ^='div1' or title = ${str_var2} or @id $= '1')and @hidden='']"></div> --><!-- idea-145549 --><!-- commented-out for now since doesn't work actually - to investigate later -->
+<div th:include="incl2::div[@class $= 'ss'][title != 'div1_title'][id ^= 'div2']"></div>
+
+<h2>=== attributes w/o nodes: ===</h2>
+<!-- idea-145462 -->
+<div th:include="incl2::[@class = 'div3_class']"></div>
+<div th:include="incl2::[class = 'div3_class']"></div>
+
+<h2>=== jQuery-style selectors: ===</h2>
+<!-- idea-145465 -->
+<div th:include="incl2::div#div1_id"></div>
+<div th:include="incl2:://div#div1_id"></div>
+<div th:include="incl2::#div1_id"></div>
+<div th:include="incl2::div.div2_class"></div>
+<div th:include="incl2:://div.div2_class"></div>
+<div th:include="incl2::.div2_class"></div>
+<th:block th:insert="incl2 :: //head/title" />
+
+
+<div th:include="incl3::fr1"></div>
+</body>
+</html>

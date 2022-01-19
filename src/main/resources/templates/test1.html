@@ -1,0 +1,79 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head  th:replace="incl1::head-body(title='included fragment')">
+    <title></title>
+</head>
+<body>
+
+<h1> conditional expressions: </h1>
+<h4 th:text="${ bool_var1 ? 'true' : 'false'}">error is shown - idea-145286</h4>
+<h4 th:text="${bool_var1} ? 'true':'false'">ok</h4>
+<!--<h1 th:text="${${bool_var1}? 'true':'false'}">false positive; idea-145289</h1>-->
+
+<h1> elvis operator: </h1>
+<h4 th:text="${nullable_var} ?:'default'">ok</h4>
+<!--<h1 th:text="${nullable_var?:'default'}">false positive; idea-145289</h1>-->
+<!--<h1 th:text="${${nullable_var}?: 'default'}">false positive; idea-145289</h1>-->
+
+<h1> combined conditional and elvis expressions: </h1>
+<h4 th:text="${nullable_var}?: (${bool_var1}? 'true' : ${(0>1)})">ok</h4>
+
+<h1> idea-145295: errors are shown in conditional expressions  here</h1>
+<div th:unless="${int_var1} == 0">
+    unless test
+</div>
+<div th:if="int_var1 &lt; int_var2">
+    if test
+</div>
+<div th:if="1 &gt; 0">
+    if test
+</div>
+
+<h1> static members referencing </h1>
+<!-- problematic contents - to investigate -->
+<!-- <p th:text="${@com.example.thymeleaftests.MyBean1@FOO}"></p>
+<p th:text="${@com.example.thymeleaftests.MyBean1@fooStaticMethod(@com.example.thymeleaftests.MyBean1@FOO)}"></p>-->
+
+
+<h1> idea-141118 </h1>
+
+<div th:if="${!myBean1.isFlag()}">
+    <p th:text="${!myBean1.testStr('foos')}"></p>
+    <p th:text="${myBean1.str}"></p>
+</div>
+
+<h1> idea-144707 </h1>
+<div th:with="with_arg1 = ${myBean1.str+' '}, with_arg2 = ${str_var1+' '}, with_arg3 = ${int_var2+100}">
+     <p th:text="${with_arg1+with_arg2+with_arg3}"></p>
+</div>
+
+<h1>Literal tokens:</h1>
+<p th:text="--This.123-Token.is.Valid--">redundant syntax highlighting - idea-145515 </p>
+<p th:text="This_[Token]_is_Valid">brackets are not parsed - idea-145514 </p>
+
+<h1> Substitutions:</h1>
+<p th:text="|The variables *{str_var1}, ${str_var2} and message #{test1.property1} are substituted |">ok</p>
+<p th:text="|  literals 'foo' and digits like 12,3,4567890 or false / true should not be parsed  |">ok</p>
+<p th:text="|  various operators (&&, !, + , ==, etc) should not be parsed  |">IDEA-130234</p>
+<p th:text="|  multiple underscores ${str_var1}__ should not be parsed  |">IDEA-182135</p>
+<p th:text="|  special symbols  - ${str_var1} &larr; ${str_var2} -  should not be parsed  |">IDEA-130234</p>
+
+<a th:href="@{/test31(param1='smth',param2=|${str_var1} and ${str_var2}!|)}">check IDEA-264631</a>
+
+<h1>Operations:</h1>
+<p th:text=" ${myBean1.num}%${ - int_var1 }">mod</p>
+<p th:text=" ${int_var1}-${ - int_var2 }">binary minus</p>
+<p th:text=" -${ - myBean1.num }">unary minus</p>
+
+<h1>Iterations by Map:</h1>
+<ul th:each="mapElement, mapElementStat: ${map_var1}">
+    <li th:text="${mapElementStat}+${mapElement.key}+': '+${mapElement.value}"></li>
+</ul>
+
+<p th:inline="text">
+    [[${myBean1.num}]] - see idea-130801
+</p>
+
+</body>
+</html>

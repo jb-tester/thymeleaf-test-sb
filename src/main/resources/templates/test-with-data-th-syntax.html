@@ -1,0 +1,20 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+    <h1>test data-prefix-attr syntax</h1>
+    <div data-th-if="${bool_var1}">
+        <th-block data-th-each="el:${list_var1}">
+            <p data-th-text="${elStat}"></p>
+            <p data-th-text="${str_var1}"></p>
+            <ul data-th-each="itVar:${map_var1}">
+                <li data-th-text="${itVar.value}"></li>
+            </ul>
+        </th-block>
+    </div>
+
+</body>
+</html>
